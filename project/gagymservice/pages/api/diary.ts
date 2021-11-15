@@ -1,7 +1,15 @@
 import axios from "axios";
 
+export interface DiaryPagingResponse {
+  content: DiaryItemResponse[];
+  last: boolean;
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+}
 
-export interface DiaryItemResponse{
+export interface DiaryItemResponse {
   id: number;
   memberName: string;
   diaryMorning: string;
@@ -9,42 +17,49 @@ export interface DiaryItemResponse{
   diaryDinner: string;
   diaryRoutine: string;
   diaryRequest: string;
+  trainerName: string;
   trainerFeedback: string;
   diaryCreateTime: number;
-  isEdit?: boolean;
-}
 
-export interface DiaryItemRequest{
+}
+export interface DiaryItemRequest {
   memberName: string;
   diaryMorning: string;
   diaryLunch: string;
   diaryDinner: string;
   diaryRoutine: string;
   diaryRequest: string;
+  trainerName: string;
   trainerFeedback: string;
-  diaryCreateTime: number;
-  isEdit?: boolean;
-}
-export interface reservation{
-  
+  //diaryCreateTime: number;
 }
 
 const diaryApi = {
-  get: (id: number) =>
-    axios.get<DiaryItemResponse>(
-       `${"http://localhost:8080"}/ptDiary/{id}`
-    ),
-  // axios.get<응답데이터의타입>(요청URL);
-  // GET 요청URL HTTP/1.1
-  fetch: () =>
-    axios.get<DiaryItemResponse[]>(
-      `${"http://localhost:8080"}/ptDiary`
-    ),
-  add:(diaryItem:DiaryItemRequest)=>
-  axios.post<DiaryItemResponse>(
-    `${"http://localhost:8080"}/ptDiary`,
-    diaryItem
-  )
 
-}
+  fetch: () =>
+  axios.get<DiaryItemResponse[]>(`http://localhost:8080/partner/ptDiary/list`),
+
+  fetchPaging: (page: number, size: number) =>
+    axios.get<DiaryPagingResponse>(
+      `http://localhost:8080/partner/ptDiary/paging?page=${page}&size=${size}`
+    ),
+
+
+  add: (diaryItem: DiaryItemRequest) =>
+    axios.post<DiaryItemResponse>(
+      `http://localhost:8080/partner/ptDiary`,
+      diaryItem
+    ),
+
+  remove: (id: number) =>
+    axios.delete<boolean>(`http://localhost:8080/partner/ptDiary/${id}`),
+
+
+  modify: (id: number, diaryItem: DiaryItemRequest) =>
+    axios.put<DiaryItemResponse>(
+      `http://localhost:8080/partner/ptDiary/${id}`,
+      diaryItem
+    )
+};
+
 export default diaryApi;

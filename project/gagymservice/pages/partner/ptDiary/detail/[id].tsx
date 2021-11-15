@@ -1,8 +1,8 @@
 
 import { useRouter } from "next/router";
+import { useEffect } from "preact/hooks";
 import { useDispatch, useSelector } from "react-redux";
 import Layout from "../../../../components/layout"
-import { requestFetchDiaryItem } from "../../../../middleware/modules/diary";
 import { AppDispatch, RootState } from "../../../../provider";
 
 const PTdetail = ()=>{
@@ -14,11 +14,7 @@ const PTdetail = ()=>{
 
     let diaryItem = useSelector((state : RootState)=>state.diary.data.find((item)=>item.id === +id)) 
 
-    if(id){
-        if(!diaryItem){
-            dispatch(requestFetchDiaryItem(+id));
-        }
-    }
+    
 
     return(
         <Layout>

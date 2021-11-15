@@ -1,4 +1,4 @@
-import { useEffect ,useRef} from "react";
+import { MutableRefObject, useEffect ,useRef} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { AppDispatch, RootState } from "../../../provider";
@@ -9,21 +9,22 @@ import { PartnerItem } from "../../../provider/modules/partner";
 import Layout from "../../../components/layout";
 const Create =()=>{
 
-    const gymNameRef=useRef<HTMLInputElement>(null);
-    const gymCoNumRef=useRef<HTMLInputElement>(null);
-    const gymLocateSiRef=useRef<HTMLInputElement>(null);
-    const gymLocateGunGuRef=useRef<HTMLInputElement>(null);
-    const gymAddressRef=useRef<HTMLInputElement>(null);
-    const gymPhoneNumRef=useRef<HTMLInputElement>(null);
-    const gymTimeRef=useRef<HTMLInputElement>(null);
-    const gymServiceRef=useRef<HTMLInputElement>(null);
-    const gym1DayPriceRef=useRef<HTMLInputElement>(null);
-    const gym3DayPriceRef=useRef<HTMLInputElement>(null);
-    const gym7DayPriceRef=useRef<HTMLInputElement>(null);
-    const gymMonthPriceRef=useRef<HTMLInputElement>(null);
-    const gym3MonthPriceRef=useRef<HTMLInputElement>(null);
-    const gym6MonthPriceRef=useRef<HTMLInputElement>(null);
-    const gymYearPriceRef=useRef<HTMLInputElement>(null);
+    const gymNameRef=useRef() as MutableRefObject<HTMLInputElement>;
+    const gymCoNumRef=useRef() as MutableRefObject<HTMLInputElement>;
+    const gymLocateSiRef=useRef() as MutableRefObject<HTMLInputElement>;
+    const gymLocateGunGuRef=useRef() as MutableRefObject<HTMLInputElement>;
+    const gymAddressRef=useRef() as MutableRefObject<HTMLInputElement>;
+    const gymPhoneNumRef=useRef() as MutableRefObject<HTMLInputElement>;
+    const gymTimeRef=useRef() as MutableRefObject<HTMLInputElement>;
+    const gymServiceRef=useRef() as MutableRefObject<HTMLInputElement>;
+    const gymPhotoRef=useRef() as MutableRefObject<HTMLInputElement>;
+    const gym1DayPriceRef=useRef() as MutableRefObject<HTMLInputElement>;
+    const gym3DayPriceRef=useRef() as MutableRefObject<HTMLInputElement>;
+    const gym7DayPriceRef=useRef() as MutableRefObject<HTMLInputElement>;
+    const gymMonthPriceRef=useRef() as MutableRefObject<HTMLInputElement>;
+    const gym3MonthPriceRef=useRef() as MutableRefObject<HTMLInputElement>;
+    const gym6MonthPriceRef=useRef() as MutableRefObject<HTMLInputElement>;
+    const gymYearPriceRef=useRef() as MutableRefObject<HTMLInputElement>;
 
     const partnerData= useSelector((state:RootState)=> state.partner.data)
 
@@ -35,32 +36,42 @@ const Create =()=>{
 
     useEffect(()=>{
         console.log("--isAddCompleted 변경 :" + isAddCompleted) 
-        isAddCompleted && router.push("/partner/information/detail");
-    }, [isAddCompleted, router, dispatch])
+        isAddCompleted && router.push(`/partner/information/list`);
+    }, [isAddCompleted, router, dispatch] )
     
     const handleAddClick = () => {
+        if(gymPhotoRef.current?.files?.length){
+            const imageFile = gymPhotoRef.current.files[0];
+            const reader = new FileReader();
+            reader.onload=()=>{
         const item : PartnerItem = {
             id : partnerData.length ? partnerData[0].id+1 : 1,
-            gymName:gymNameRef.current ? gymNameRef.current.value : "",
-            gymCoNum : gymCoNumRef.current ? gymCoNumRef.current.value :"",
-            gymLocateSi : gymLocateSiRef.current ? gymLocateSiRef.current.value:"",
-            gymLocateGunGu :gymLocateGunGuRef.current ? gymLocateGunGuRef.current.value:"",
-            gymAddress : gymAddressRef.current ? gymAddressRef.current.value:"",
-            gymPhoneNum :gymPhoneNumRef.current ? gymPhoneNumRef.current.value:"",
-            gymTime : gymTimeRef.current ? gymTimeRef.current.value:"",
-            gymService :gymServiceRef.current ? gymServiceRef.current.value:"",
-            gym1DayPrice :gym1DayPriceRef.current ? gym1DayPriceRef.current.value:"",
-            gym3DayPrice :gym3DayPriceRef.current ? gym3DayPriceRef.current.value:"",
-            gym7DayPrice :gym7DayPriceRef.current ? gym7DayPriceRef.current.value:"",
-            gymMonthPrice : gymMonthPriceRef.current ? gymMonthPriceRef.current.value:"",
-            gym3MonthPrice : gym3MonthPriceRef.current ? gym3MonthPriceRef.current.value:"",
-            gym6MonthPrice : gym6MonthPriceRef.current ? gym6MonthPriceRef.current.value:"",
-            gymYearPrice : gymYearPriceRef.current ? gymYearPriceRef.current.value:"",
+            gymName:gymNameRef.current?.value,
+            gymCoNum : gymCoNumRef.current?.value,
+            gymLocateSi : gymLocateSiRef.current?.value,
+            gymLocateGunGu :gymLocateGunGuRef.current?.value,
+            gymAddress : gymAddressRef.current?.value,
+            gymPhoneNum :gymPhoneNumRef.current?.value,
+            gymTime : gymTimeRef.current?.value,
+            gymService :gymServiceRef.current?.value,
+            gymPhoto: gymPhotoRef.current?.value,
+            gym1DayPrice :gym1DayPriceRef.current?.value,
+            gym3DayPrice :gym3DayPriceRef.current?.value,
+            gym7DayPrice :gym7DayPriceRef.current?.value,
+            gymMonthPrice : gymMonthPriceRef.current?.value,
+            gym3MonthPrice : gym3MonthPriceRef.current?.value,
+            gym6MonthPrice : gym6MonthPriceRef.current?.value,
+            gymYearPrice : gymYearPriceRef.current?.value,
+            
             
         };
         
         //Saga action
         dispatch(requestAddPartner(item));
+        router.push(`/partner/information/list`);
+    };
+    reader.readAsDataURL(imageFile)
+    }
     }
 
     
@@ -140,29 +151,28 @@ return(
                     <input ref={gymServiceRef} placeholder=" 부가 서비스등을 작성 해주세요 ex)샤워, 와이파이 등등" style ={{width : "400px", height:"45px", borderBlockEndWidth:"4px"}}></input>
                 </div>
             </div>
-            {/* 강사 서비스 */}
-            <div className="mt-3 d-flex">
-                <h4
-                className="col text-nowrap text-center"
-                style ={{width : "200px"}}
-                >강사 서비스</h4> 
-                <div style={{width:"70%"}}>
-                    <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group"
-                    style ={{width : "400px"}}>
-                        <input type="checkbox" className="btn-check" id="btncheck1" autoComplete="off" />
-                        <label className="btn btn-outline-primary" htmlFor="btncheck1">헬스장</label>
-
-                        <input type="checkbox" className="btn-check" id="btncheck2" autoComplete="off" />
-                        <label className="btn btn-outline-primary" htmlFor="btncheck2">PT</label>
-
-                        <input type="checkbox" className="btn-check" id="btncheck3" autoComplete="off" />
-                        <label className="btn btn-outline-primary" htmlFor="btncheck3">요가</label>
-
-                        <input type="checkbox" className="btn-check" id="btncheck4" autoComplete="off" />
-                        <label className="btn btn-outline-primary" htmlFor="btncheck4">필라테스</label>
+            {/* 헬스장 사진 */}
+            {/* 사진 */}
+            <div className="d-flex mt-4">
+                    <h4 
+                    className="col me-3 text-nowrap text-center"
+                    >사진</h4> 
+                    <div style={{width:"70%"}}>
+                      <div >
+                        {/* <Image className=" mt-3" style={{ width: "100px", height:"100px" }} src={trainerData.} alt="trainerPhoto" />                */}
+                        <input
+                        style={{width:"67%" }}
+                            className="form-control mt-2"
+                            type="file"
+                            accept="image/*"
+                            // onChange={() => {
+                            //     changeFile();
+                            // }}
+                            ref={gymPhotoRef}
+                        />
+                      </div>
                     </div>
                 </div>
-            </div>
             {/* 가격 */}
             <div>
                 <h3 

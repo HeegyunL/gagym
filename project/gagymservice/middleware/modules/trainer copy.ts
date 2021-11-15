@@ -42,7 +42,7 @@ function* addData(action : PayloadAction<TrainerItem>){
   // rest api로 보낼 요청객체
   const trainerItemRequest : TrainerItemRequest ={
     id:trainerItemPayload.id,
-    gymCode:trainerItemPayload.gymCode,
+    gymName:trainerItemPayload.gymName,
     trainerName:trainerItemPayload.trainerName,
     trainerIntro:trainerItemPayload.trainerIntro,
     trainerPhotoUrl:trainerItemPayload.trainerPhotoUrl,
@@ -69,7 +69,7 @@ function* addData(action : PayloadAction<TrainerItem>){
 
  const trainerItem : TrainerItem={
   id:result.data.id,
-  gymCode:result.data.gymCode,
+  gymName:result.data.gymName,
   trainerName:result.data.trainerName,
   trainerIntro:result.data.trainerIntro,
   trainerPhotoUrl:result.data.trainerPhotoUrl,
@@ -106,7 +106,7 @@ const trainers = result.data.map(
     (item) =>
       ({
         id:item.id,
-        gymCode:item.gymCode,
+        gymName:item.gymName,
         trainerName:item.trainerName,
         trainerIntro:item.trainerIntro,
         trainerPhotoUrl:item.trainerPhotoUrl,
@@ -171,7 +171,7 @@ const trainers = result.data.map(
   
     const trainerItemRequest: TrainerItemRequest = {
         id:trainerItemPayload.id,
-        gymCode:trainerItemPayload.gymCode,
+        gymName:trainerItemPayload.gymName,
         trainerName:trainerItemPayload.trainerName,
         trainerIntro:trainerItemPayload.trainerIntro,
         trainerPhotoUrl:trainerItemPayload.trainerPhotoUrl,
@@ -195,7 +195,7 @@ const trainers = result.data.map(
   
     const trainerItem: TrainerItem = {
       id:result.data.id,
-      gymCode:result.data.gymCode,
+      gymName:result.data.gymName,
       trainerName:result.data.trainerName,
       trainerIntro:result.data.trainerIntro,
       trainerPhotoUrl:result.data.trainerPhotoUrl,
@@ -217,7 +217,7 @@ const trainers = result.data.map(
   }
 
 // saga action을 감지하는 부분
-export default function* trainerSaga(){
+export default function* partnerSaga(){
   //동일한 타입의 액션은 모두 처리함
   yield takeEvery(requestAddTrainer, addData);
 

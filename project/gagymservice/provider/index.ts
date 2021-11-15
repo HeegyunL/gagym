@@ -4,6 +4,7 @@ import rootSaga from "../middleware";
 import partnerReducer from "./modules/partner"
 import diaryReducer from "./modules/diary"
 import trainerReducer from "./modules/trainer"
+import reservationReducer from "./modules/reservation"
 
 
 
@@ -18,6 +19,7 @@ export const store = configureStore({
     partner : partnerReducer,
     diary : diaryReducer,
     trainer : trainerReducer,
+    reservation: reservationReducer,
   },
   middleware : [sagaMiddleware],
   devTools :true //개발툴 사용 여부

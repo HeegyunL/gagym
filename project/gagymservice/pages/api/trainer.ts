@@ -1,8 +1,8 @@
 import axios from "axios";
 
-
 export interface TrainerItemResponse{
   id: number;
+  gymCode:number;
   trainerName:string;
   trainerIntro:string;
   trainerPhotoUrl:string;
@@ -19,6 +19,7 @@ export interface TrainerItemResponse{
 
 export interface TrainerItemRequest{
   id: number;
+  gymCode:number;
   trainerName:string;
   trainerIntro:string;
   trainerPhotoUrl:string;
@@ -32,26 +33,29 @@ export interface TrainerItemRequest{
   pilates10TimePrice:string| undefined;
   pilates30TimePrice:string| undefined;
 }
-export interface reservation{
-  
-}
 
 const trainerApi = {
   get: () =>
     axios.get<TrainerItemResponse>(
-       `${"http://localhost:8080"}/partner/`
+       `http://localhost:8080/trainer`
     ),
   // axios.get<응답데이터의타입>(요청URL);
   // GET 요청URL HTTP/1.1
   fetch: () =>
-    axios.get<TrainerItemResponse[]>(
-      `${"http://localhost:8080"}/partner`
-    ),
-  add:(trainerItem:TrainerItemRequest)=>
+  axios.get<TrainerItemResponse[]>(`http://localhost:8080/trainer`),
+  
+    add:(trainerItem:TrainerItemRequest)=>
   axios.post<TrainerItemResponse>(
-    `${"http://localhost:8080"}/partner`,
+    `http://localhost:8080/trainer`,
+    trainerItem
+  ),
+  remove:(id:number) =>
+  axios.delete<boolean>(`http://localhost:8080/trainer/${id}`),
+
+  modify :( id:number,trainerItem:TrainerItemRequest)=>
+  axios.put<TrainerItemResponse>(
+    `http://localhost:8080/trainer/${id}`,
     trainerItem
   )
-
-}
+};
 export default trainerApi;

@@ -1,26 +1,91 @@
 import NavItem from "@restart/ui/esm/NavItem";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Layout from "../../../components/layout";
+import { requestFetchDiarys, requestFetchPagingDiarys } from "../../../middleware/modules/diary";
+import { requestFetchPartnerItem } from "../../../middleware/modules/partner";
+import { AppDispatch, RootState } from "../../../provider";
 import { DiaryItemResponse } from "../../api/diary";
 
-interface IndexProp {
-  ptDiarys : DiaryItemResponse[];
-  
-}
-const List= ( {ptDiarys}: IndexProp)=>{
+const getTimeString = (unixtime: number) => {
+  const dateTime = new Date(unixtime);
+  var month = ("0" + (1 + dateTime.getMonth())).slice(-2);
+  var day = ("0" + dateTime.getDate()).slice(-2);
+  return month + "/" + day;
+};
+
+const List= ()=>{
+  const diary = useSelector((state:RootState)=> state.diary);
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    if (!diary.isFetched) {
+      dispatch(
+        requestFetchPagingDiarys({
+          page: 0,
+          size: diary.pageSize,
+        })
+      );
+    }
+  }, [dispatch, diary.isFetched, diary.pageSize]);
+
+  const handlePageChanged = (page: number) => {
+    console.log("--page: " + page);
+    dispatch(
+      requestFetchPagingDiarys({
+        page,
+        size: diary.pageSize,
+      })
+    );
+  };
+
+  const handlePageSizeChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log(e.currentTarget.value);
+    dispatch(
+      requestFetchPagingDiarys({
+        page: diary.page,
+        size: +e.currentTarget.value,
+      })
+    );
+  };
 
     return(
         <Layout>
             <div>
             <body >
            <div className="mx-auto mt-5" style={{width:"850px"}}>
-        <h4 className=" float-start">
-            PT 일지
-          </h4>
-         
+          <h4 className=" float-start">
+              PT 일지
+            </h4>
+            <div className="d-flex justify-content-end align-items-center">
+                {/*-----------------*/}
+                {/*
+                <button
+                  className="btn btn-secondary btn-sm"
+                  style={{ width: "100px;" }}
+                  onClick={() => {
+                    dispatch(requestFetchDiarys());
+                  }}
+                >
+                  <i className="bi bi-arrow-clockwise"></i>
+                </button>
+                */}
+                <select
+                  className="form-select form-select-sm mx-1 p-1"
+                  style={{ width: "55px", height: "30px" }}
+                  onChange={(e) => {
+                    handlePageSizeChanged(e);
+                  }}
+                >
+                  {[3, 5, 10, 20].map((size) => (
+                    <option value={size} selected={diary.pageSize === size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+              </div>
         <table className="table mx-auto" >
           <thead>
             <tr>
@@ -32,10 +97,9 @@ const List= ( {ptDiarys}: IndexProp)=>{
               <th scope="col">강사피드백</th>
             </tr>
           </thead>
-          {ptDiarys.map((item , index)=>(
-          <tbody key={`partners-item-${index}`}>
-            <Link href={`/partner/ptDiary/detail/${item.id}`}>
-            <tr>
+          <tbody>
+          {diary.data.map((item)=>(
+            <tr onClick={()=>{router.push(`/partner/ptDiary/detail/${item.id}`)}}>
               <td>{item.diaryCreateTime}</td>
               <td>{item.memberName}</td>
               <td>{item.diaryMorning}</td>
@@ -43,9 +107,8 @@ const List= ( {ptDiarys}: IndexProp)=>{
               <td >{item.diaryRequest}</td>
               <td >{item.trainerFeedback}</td>
             </tr>
-          </Link>
-          </tbody>
           ))}
+          </tbody>
         </table>
         </div>
         </body>
@@ -54,49 +117,5 @@ const List= ( {ptDiarys}: IndexProp)=>{
         )
 }
 
-export async function getServerSideProps(){
-  // const res = await partnerApi.fetch();
-  // const partners = res.data
-  const partners  =[{
-    id:0,      
-      gymName : "한동기",
-      gymCoNum : "12312",
-      gymLocateSi : "서울",
-      gymLocateGunGu:"중구",
-      gymAddress : "서울시 동작구 상도동 22-22 2층",
-      gymPhoneNum:"102314",
-      gymTime : "08-22",
-  }
-  ]
-  const ptDiarys  =[
-    {
-    id:0,      
-    memberName : "한동기",
-    diaryMorning : "된장찌개",
-    diaryRoutine : "서울",
-    diaryRequest:"중구에도 있나요",
-    trainerFeedback : "서울시 동작구 상도동 22-22 2층로 오세요",
-    diaryCreateTime : "2021-10-21"
-  },
-  {
-    id:1,      
-    memberName : "한동기",
-    diaryMorning : "된장찌개",
-    diaryRoutine : "서울",
-    diaryRequest:"중구에도 있나요",
-    trainerFeedback : "서울시 동작구 상도동 22-22 2층로 오세요",
-    diaryCreateTime : "2021-10-21"
-  },
-  {
-    id:2,      
-    memberName : "한동기",
-    diaryMorning : "된장찌개",
-    diaryRoutine : "서울",
-    diaryRequest:"중구에도 있나요",
-    trainerFeedback : "서울시 동작구 상도동 22-22 2층로 오세요",
-    diaryCreateTime : "2021-10-21"
-  },
-  ]
-  return {props : {partners,ptDiarys }}
-}
+
 export default List;

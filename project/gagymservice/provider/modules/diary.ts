@@ -10,58 +10,202 @@ export interface DiaryItem {
   diaryDinner: string;
   diaryRoutine: string;
   diaryRequest: string;
+  trainerName:string;
   trainerFeedback: string;
-  diaryCreateTime: number;
+  diaryCreateTime?: number;
   isEdit?: boolean;
 }
 
 
 
-
+export interface DiaryPage {
+  data: DiaryItem[];
+  totalElements: number;
+  totalPages: number;
+  page: number;
+  pageSize: number;
+  isLast: boolean;
+}
 interface DiaryState {
   data : DiaryItem[];
   isFetched : boolean;
   isAddCompleted? : boolean;
+  isRemoveCompleted?: boolean; 
+  isModifyCompleted?: boolean;
+  totalElements?: number;
+  totalPages: number;
+  page: number;
+  pageSize: number;
+  isLast?: boolean;
 }
 
 const initialState : DiaryState ={
-  data : [],
-  isFetched :false,
+  data: [
+    {
+      id: 1,
+  memberName: "이희균",
+  diaryMorning: "사과1쪽",
+  diaryLunch: "부대찌게",
+  diaryDinner: "삼겹살2인분",
+  diaryRoutine: "pt1시간 , 스쿼트100회",
+  diaryRequest: "술먹고 운동해도 되요?",
+  trainerName:"한동기",
+  trainerFeedback: "안됩니다",
+    },
+    {
+      id: 2,
+  memberName: "이희균",
+  diaryMorning: "사과1쪽",
+  diaryLunch: "부대찌게",
+  diaryDinner: "삼겹살2인분",
+  diaryRoutine: "pt1시간 , 스쿼트100회",
+  diaryRequest: "술먹고 운동해도 되요?",
+  trainerName:"한동기",
+  trainerFeedback: "안됩니다",
+    },
+    {
+      id: 3,
+  memberName: "이희균",
+  diaryMorning: "사과1쪽",
+  diaryLunch: "부대찌게",
+  diaryDinner: "삼겹살2인분",
+  diaryRoutine: "pt1시간 , 스쿼트100회",
+  diaryRequest: "술먹고 운동해도 되요?",
+  trainerName:"한동기",
+  trainerFeedback: "안됩니다",
+    },
+    {
+      id: 4,
+  memberName: "이희균",
+  diaryMorning: "사과1쪽",
+  diaryLunch: "부대찌게",
+  diaryDinner: "삼겹살2인분",
+  diaryRoutine: "pt1시간 , 스쿼트100회",
+  diaryRequest: "술먹고 운동해도 되요?",
+  trainerName:"한동기",
+  trainerFeedback: "안됩니다",
+    },
+    {
+      id: 5,
+  memberName: "이희균",
+  diaryMorning: "사과1쪽",
+  diaryLunch: "부대찌게",
+  diaryDinner: "삼겹살2인분",
+  diaryRoutine: "pt1시간 , 스쿼트100회",
+  diaryRequest: "술먹고 운동해도 되요?",
+  trainerName:"한동기",
+  trainerFeedback: "안됩니다",
+    },
+    {
+      id: 6,
+  memberName: "이희균",
+  diaryMorning: "사과1쪽",
+  diaryLunch: "부대찌게",
+  diaryDinner: "삼겹살2인분",
+  diaryRoutine: "pt1시간 , 스쿼트100회",
+  diaryRequest: "술먹고 운동해도 되요?",
+  trainerName:"한동기",
+  trainerFeedback: "안됩니다",
+    },
+    {
+      id: 7,
+  memberName: "이희균",
+  diaryMorning: "사과1쪽",
+  diaryLunch: "부대찌게",
+  diaryDinner: "삼겹살2인분",
+  diaryRoutine: "pt1시간 , 스쿼트100회",
+  diaryRequest: "술먹고 운동해도 되요?",
+  trainerName:"한동기",
+  trainerFeedback: "안됩니다",
+    },
+    {
+      id: 8,
+  memberName: "이희균",
+  diaryMorning: "사과1쪽",
+  diaryLunch: "부대찌게",
+  diaryDinner: "삼겹살2인분",
+  diaryRoutine: "pt1시간 , 스쿼트100회",
+  diaryRequest: "술먹고 운동해도 되요?",
+  trainerName:"한동기",
+  trainerFeedback: "안됩니다",
+    },
+  ],
+  isFetched: false,
+  page: 0,
+  pageSize: 5,
+  totalPages: 0,
 }
 
 
 const diarySlice = createSlice({
-  name : "diary",
+  name: "diary",
   initialState,
-  reducers:{
-    // Payload로 item객체를 받음
-    addDiary : (state, action:PayloadAction<DiaryItem>)=>{
+  reducers: {
+    addDiary: (state, action: PayloadAction<DiaryItem>) => {
       const diary = action.payload;
+      console.log("--in reducer function--");
+      console.log(diary);
       state.data.unshift(diary);
-      state.isAddCompleted = true; //추가확인 표시
+      state.isAddCompleted = true; 
     },
-    //payload 없는 reducer
-    //complted 관련된 속성을 삭제함 (undefined 상태)
-    initialCompleted : (state)=>{
+
+    initialCompleted: (state) => {
       delete state.isAddCompleted;
-    }, 
-    initialDiaryItem : (state, action: PayloadAction<DiaryItem>)=>{
-      const diary = action.payload;
-      state.data=[{...diary}];
+      delete state.isRemoveCompleted;
+      delete state.isModifyCompleted;
     },
-    initialDiary:(state, action:PayloadAction<DiaryItem[]>)=>{
+
+    removeDiary: (state, action: PayloadAction<number>) => {
+      const id = action.payload;
+      state.data.splice(
+        state.data.findIndex((item) => item.id === id),
+        1
+      );
+      state.isRemoveCompleted = true;
+    },
+    modifyDiary: (state, action: PayloadAction<DiaryItem>) => {
+      const modifyItem = action.payload;
+      const diaryItem = state.data.find((item) => item.id === modifyItem.id);
+      if (diaryItem) {
+        diaryItem.memberName = modifyItem.memberName;
+        diaryItem.diaryMorning = modifyItem.diaryMorning;
+        diaryItem.diaryLunch = modifyItem.diaryLunch;
+        diaryItem.diaryDinner = modifyItem.diaryDinner;
+        diaryItem.diaryRoutine = modifyItem.diaryRoutine;
+        diaryItem.diaryRequest = modifyItem.diaryRequest;
+        diaryItem.trainerFeedback = modifyItem.trainerFeedback;
+        diaryItem.diaryCreateTime = modifyItem.diaryCreateTime;
+
+      }
+           state.isModifyCompleted = true;
+    },
+
+    initialDiary: (state, action: PayloadAction<DiaryItem[]>) => {
       const diarys = action.payload;
       state.data = diarys;
       state.isFetched = true;
     },
-    
+    initialPagedDiary: (state, action: PayloadAction<DiaryPage>) => {
 
+      state.data = action.payload.data;
+      state.totalElements = action.payload.totalElements;
+      state.totalPages = action.payload.totalPages;
+      state.page = action.payload.page;
+      state.pageSize = action.payload.pageSize;
+      state.isLast = action.payload.isLast;
+      state.isFetched = true;
+    },
   },
 });
-export const {
-  addDiary,
+
+export const { 
+  addDiary, 
+  removeDiary, 
+  modifyDiary,  
+  initialDiary,
   initialCompleted,
-  initialDiaryItem,
-  initialDiary
-}= diarySlice.actions;
+  initialPagedDiary,
+} = diarySlice.actions;
+
+
 export default diarySlice.reducer;

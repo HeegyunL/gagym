@@ -1,4 +1,5 @@
 import axios from "axios";
+import { TrainerItem } from "../../provider/modules/trainer";
 
 export interface PartnerItemResponse{
   id: number;
@@ -10,6 +11,7 @@ export interface PartnerItemResponse{
   gymPhoneNum : string;
   gymTime : string;
   gymService :string;
+  gymPhoto:string;
   gym1DayPrice : string;
   gym3DayPrice : string;
   gym7DayPrice : string;
@@ -17,21 +19,8 @@ export interface PartnerItemResponse{
   gym3MonthPrice : string;
   gym6MonthPrice : string;
   gymYearPrice : string;
-}
-  interface GymTrainer{
-    id: number;
-    trainerName:string;
-    trainerIntro:string;
-    trainerPhotoUrl:string;
-    pt1TimePrice?:string;
-    pt10TimePrice?:string;
-    pt30TimePrice?:string;
-    yoga1TimePrice?:string;
-    yoga10TimePrice?:string;
-    yoga30TimePrice?:string;
-    pilates1TimePrice?:string;
-    pilates10TimePrice?:string;
-    pilates30TimePrice?:string;
+  // gymTrainer: TrainerItem[];
+
 }
 export interface PartnerItemRequest{
   id: number;
@@ -43,6 +32,7 @@ export interface PartnerItemRequest{
   gymPhoneNum : string;
   gymTime : string;
   gymService :string;
+  gymPhoto:string;
   gym1DayPrice : string;
   gym3DayPrice : string;
   gym7DayPrice : string;
@@ -50,35 +40,32 @@ export interface PartnerItemRequest{
   gym3MonthPrice : string;
   gym6MonthPrice : string;
   gymYearPrice : string;
-  gymTrainer ?: GymTrainer[];
+  // gymTrainer : TrainerItem[];
 }
 
 
 const partnerApi = {
-  get: (id:number) =>
+  get: () =>
     axios.get<PartnerItemResponse>(
-       `http://localhost:8080/partner/information/detail`
+       `http://localhost:8080/partner`
     ),
   // axios.get<응답데이터의타입>(요청URL);
   // GET 요청URL HTTP/1.1
   fetch: () =>
-    axios.get<PartnerItemResponse[]>(
-      `http://localhost:8080/partner/information/detail`
-      ),
+  axios.get<PartnerItemResponse[]>(`http://localhost:8080/partner`),
   
     add:(partnerItem:PartnerItemRequest)=>
   axios.post<PartnerItemResponse>(
-    `"http://localhost:8080/partner/information/Create`,
+    `http://localhost:8080/partner`,
     partnerItem
   ),
-  remove:() =>
-  axios.delete<boolean>(`http://localhost:8080/partner/information/detail`),
+  remove:(id:number) =>
+  axios.delete<boolean>(`http://localhost:8080/partner/${id}`),
 
-  modify :( partnerItem:PartnerItemRequest)=>
+  modify :( id:number,partnerItem:PartnerItemRequest)=>
   axios.put<PartnerItemResponse>(
-    `http://localhost:8080/partner/information/detail`,
+    `http://localhost:8080/partner/${id}`,
     partnerItem
   )
-
 };
 export default partnerApi;

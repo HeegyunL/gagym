@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import Layout from "../../../../components/layout"
 import { AppDispatch, RootState } from "../../../../provider";
+import reservation from "../../../../provider/modules/reservation";
 
 const PTdetail = ()=>{
 
@@ -10,7 +11,7 @@ const PTdetail = ()=>{
 
     const id = router.query.id as string;
     
-    let reservationItem = useSelector((state : RootState)=>state.diary.data.find((item)=>item.id === +id)) 
+    let reservationItem = useSelector((state : RootState)=>state.reservation.data.find((item)=>item.id === +id)) 
 
 
     return(
@@ -23,43 +24,43 @@ const PTdetail = ()=>{
                         <h4 
                         className="col me-3 text-nowrap text-center"
                         style ={{width : "200px"}}
-                        >예약 번호</h4> 
-                        <p style ={{width : "400px", height:"45px", borderBlockEndWidth:"4px"}}> 1235</p>
+                        >헬스장명</h4> 
+                        <p style ={{width : "400px", height:"45px", borderBlockEndWidth:"4px"}}> {reservationItem.gymName}</p>
                     </div> 
                     <div className="d-flex mt-3">
                         <h4 
                         className="col me-3 text-nowrap text-center"
                         style ={{width : "200px"}}
                         >이름</h4> 
-                       <p style ={{width : "400px", height:"45px", borderBlockEndWidth:"4px"}}> 이말년</p>
+                       <p style ={{width : "400px", height:"45px", borderBlockEndWidth:"4px"}}> {reservationItem.memberName}</p>
                     </div> 
                     <div className="d-flex mt-3">
                         <h4 
                         className="col me-3 text-nowrap text-center"
                         style ={{width : "200px"}}
                         >연락처</h4> 
-                        <p style ={{width : "400px", height:"45px", borderBlockEndWidth:"4px"}}> 010-2834-2384</p>
+                        <p style ={{width : "400px", height:"45px", borderBlockEndWidth:"4px"}}> {reservationItem.memberPhoneNum}</p>
                     </div> 
                     <div className="d-flex mt-3">
                         <h4 
                         className="col me-3 text-nowrap text-center"
                         style ={{width : "200px"}}
                         >희망 이용권</h4> 
-                        <p style ={{width : "400px", height:"45px", borderBlockEndWidth:"4px"}}> PT1회이용권</p>
+                        <p style ={{width : "400px", height:"45px", borderBlockEndWidth:"4px"}}> {reservationItem.reservationService}</p>
                     </div> 
                     <div className="d-flex mt-3">
                         <h4 
                         className="col me-3 text-nowrap text-center"
                         style ={{width : "200px"}}
                         >희망 강사</h4> 
-                        <p style ={{width : "400px", height:"45px", borderBlockEndWidth:"4px"}}> 이두근</p>
+                        <p style ={{width : "400px", height:"45px", borderBlockEndWidth:"4px"}}>{reservationItem.reservationTeacher}</p>
                     </div> 
                     <div className="d-flex mt-3">
                         <h4 
                         className="col me-3 text-nowrap text-center"
                         style ={{width : "200px"}}
                         >문의 사항</h4> 
-                        <p style ={{width : "400px", height:"45px", borderBlockEndWidth:"4px"}}> 하체중심으로 자세교정가능하신가요??</p>
+                        <p style ={{width : "400px", height:"45px", borderBlockEndWidth:"4px"}}> {reservationItem.request}</p>
                     </div> 
                     <div className="d-grid mt-3  d-md-flex justify-content-between">
                     <button className="btn btn-primary mb-3" type="button">응답</button>

@@ -37,7 +37,7 @@ const AppBar = () => {
               </Link>
             </Nav.Link>
             <Nav.Link>
-              <Link href="/partner/information/detail">
+              <Link href="/partner/information/list">
                 <a href="/partner/information/Create" className="">
                 헬스장 정보
                 </a>
