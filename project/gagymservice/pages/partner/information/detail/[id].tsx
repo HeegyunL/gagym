@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, ModalBody, ModalFooter } from "reactstrap";
 import Layout from "../../../../components/layout";
-import { requestFetchPartner, requestRemovePartner } from "../../../../middleware/modules/partner";
+import { requestFetchPartner, requestFetchPartnerItem, requestRemovePartner } from "../../../../middleware/modules/partner";
 import { requestFetchTrainer } from "../../../../middleware/modules/trainer";
 import { AppDispatch, RootState, store } from "../../../../provider";
 import { removePartner } from "../../../../provider/modules/partner";
@@ -19,6 +19,13 @@ import { removePartner } from "../../../../provider/modules/partner";
     
     let partners = useSelector((state : RootState) => 
     state.partner.data.find((item) => item.id === +id ));
+    if (id) {
+      // redux에 데이터가 없으면
+      if (!partners) {
+        // 1건에 데이터를 가져와 store에 추가함
+        dispatch(requestFetchPartnerItem(+id));
+      }
+    }
    
     const isRemoveCompleted = useSelector(
       (state:RootState)=> state.partner.isRemoveCompleted
@@ -56,6 +63,18 @@ import { removePartner } from "../../../../provider/modules/partner";
             style ={{width : "200px"}}
             >헬스장 명</h4> 
             <p style ={{width : "400px", height:"45px", borderBlockEndWidth:"4px"}}> {partners.gymName}</p>
+          </div> 
+          {/* 헬스장 사진 */}
+          <div className="d-flex mt-3">
+            <h4 
+            className="col me-3 text-nowrap text-center"
+            style ={{width : "200px"}}
+            >헬스장 사진</h4> 
+            <img
+                    src={partners.gymPhoto}
+                    alt={partners.fileName}
+                    width={"100%"}
+                  />
           </div> 
           {/* 사업자 번호 */}
           <div className="d-flex mt-3">
@@ -117,7 +136,9 @@ import { removePartner } from "../../../../provider/modules/partner";
                 </Button>
                 <Modal toggle={() => setModalOpen(!modalOpen)} isOpen={modalOpen}>
                   <div className=" modal-header">
-                    <h5 className=" modal-title" id="exampleModalLabel">
+                    <h5 className=" modal-title" 
+                    // id="exampleModalLabel"
+                    >
                       강사 소개
                     </h5>
                     <button

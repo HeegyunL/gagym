@@ -1,10 +1,13 @@
 import { takeEvery, call, select, put, takeLatest} from "@redux-saga/core/effects";
 import { createAction, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
+import { dataUrlToFile } from "../../lib/string";
 import api,{ PartnerItemRequest, PartnerItemResponse } from "../../pages/api/partner";
 import { RootState } from "../../provider";
 import partnerReducer,{ addPartner,  initialCompleted, initialPartner, initialPartnerItem, modifyPartner, PartnerItem,removePartner } from "../../provider/modules/partner";
 import { TrainerItem } from "../../provider/modules/trainer";
+import fileApi from "../../pages/api/file";
+import partner from "../../provider/modules/partner";
 
 
 // saga action 생성 부분
@@ -40,6 +43,23 @@ function* addData(action : PayloadAction<PartnerItem>){
   // action의 payload로 넘어온 객체
   const partnerItemPayload = action.payload;
 
+
+  // s3업로드
+  // URL -> file변환
+  // const file : File = yield call(
+  //   dataUrlToFile,
+  //   partnerItemPayload.gymPhoto,
+  //   partnerItemPayload.fileName,
+  //   partnerItemPayload.fileType
+  // );
+  //   //form data객체 생성
+  //   const formFile = new FormData();
+  //   formFile.set("file",file);
+
+  //   //multipart/ form-data로 업로드
+  //   const fileUrl:AxiosResponse<string> = yield call(fileApi.upload, formFile);
+
+
   // rest api로 보낼 요청객체
   const partnerItemRequest : PartnerItemRequest ={
     id:partnerItemPayload.id,
@@ -51,7 +71,10 @@ function* addData(action : PayloadAction<PartnerItem>){
     gymPhoneNum : partnerItemPayload.gymPhoneNum,
     gymTime : partnerItemPayload.gymTime,
     gymService :partnerItemPayload.gymService,
+    // gymPhoto: fileUrl.data,
     gymPhoto: partnerItemPayload.gymPhoto,
+    fileType : partnerItemPayload.fileType,
+    fileName : partnerItemPayload.fileName,
     gym1DayPrice : partnerItemPayload.gym1DayPrice,
     gym3DayPrice : partnerItemPayload.gym3DayPrice,
     gym7DayPrice : partnerItemPayload.gym7DayPrice,
@@ -83,6 +106,8 @@ function* addData(action : PayloadAction<PartnerItem>){
   gymTime : result.data.gymTime,
   gymService :result.data.gymService,
   gymPhoto:result.data.gymPhoto,
+  fileType:result.data.fileType,
+  fileName:result.data.fileName,
   gym1DayPrice : result.data.gym1DayPrice,
   gym3DayPrice : result.data.gym3DayPrice,
   gym7DayPrice : result.data.gym7DayPrice,
@@ -124,6 +149,8 @@ const partners = result.data.map(
         gymTime : item.gymTime,
         gymService :item.gymService,
         gymPhoto: item.gymPhoto,
+        fileName:item.fileName,
+        fileType:item.fileType,
         gym1DayPrice : item.gym1DayPrice,
         gym3DayPrice : item.gym3DayPrice,
         gym7DayPrice : item.gym7DayPrice,
@@ -157,14 +184,17 @@ const partners = result.data.map(
 
     const id = action.payload;
 
-    // // s3 파일 삭제
-    // const partnerItem : PartnerItem = yield select((state : RootState)=>
-    // state.partner.data.find((item)=>item.id===id)
-    // );
+    // s3 파일 삭제
+    const partnerItem : PartnerItem = yield select((state : RootState)=>
+    state.partner.data.find((item)=>item.id===id)
+    );
 
-    // const urlArr=partnerItem.partnerUrl.split("/");
-    // const objectKey = urlArr[urlArr.length -1];
-    // //  ----------------
+    const urlArr=partnerItem.gymPhoto.split("/");
+    const objectKey = urlArr[urlArr.length -1];
+
+    //file api 호출해서 s3에 파일 삭제
+    yield call(fileApi.remove, objectKey);
+    //  ----------------
 
     const result : AxiosResponse<boolean> = yield call(api.remove, id);
     if(result.data){
@@ -181,6 +211,30 @@ const partners = result.data.map(
     yield console.log("--modifyData--");
   
     const partnerItemPayload = action.payload;
+
+    let fileUrl= action.payload.gymPhoto;
+    if(action.payload.gymPhoto.startsWith("data")){
+      const partnerItmeFile : PartnerItem = yield select((state: RootState)=>
+      state.partner.data.find((item)=>item.id ===partnerItemPayload.id)
+      );
+      const urlArr = partnerItmeFile.gymPhoto.split("/");
+      const objectKey = urlArr[urlArr.length - 1];
+
+      yield call(fileApi.remove, objectKey);
+      const file: File = yield call(
+        dataUrlToFile,
+        partnerItemPayload.gymPhoto,
+        partnerItemPayload.fileName,
+        partnerItemPayload.fileType
+      );
+
+      const formFile = new FormData();
+      formFile.set("file",file);
+
+      const fileRes: AxiosResponse<string> = yield call(fileApi.upload, formFile);
+      fileUrl = fileRes.data;
+    }
+
   
     const partnerItemRequest: PartnerItemRequest = {
       id:partnerItemPayload.id,
@@ -193,6 +247,8 @@ const partners = result.data.map(
       gymTime : partnerItemPayload.gymTime,
       gymService :partnerItemPayload.gymService,
       gymPhoto:partnerItemPayload.gymPhoto,
+      fileName:partnerItemPayload.fileName,
+      fileType:partnerItemPayload.fileType,
       gym1DayPrice : partnerItemPayload.gym1DayPrice,
       gym3DayPrice : partnerItemPayload.gym3DayPrice,
       gym7DayPrice : partnerItemPayload.gym7DayPrice,
@@ -221,6 +277,8 @@ const partners = result.data.map(
       gymTime : result.data.gymTime,
       gymService :result.data.gymService,
       gymPhoto:result.data.gymPhoto,
+      fileName: result.data.fileName,
+      fileType: result.data.fileType,
       gym1DayPrice : result.data.gym1DayPrice,
       gym3DayPrice : result.data.gym3DayPrice,
       gym7DayPrice : result.data.gym7DayPrice,

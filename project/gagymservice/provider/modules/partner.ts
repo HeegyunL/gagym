@@ -13,6 +13,8 @@ export interface PartnerItem {
   gymTime : string;
   gymService :string;
   gymPhoto:string;
+  fileType:string;
+  fileName:string;
   gym1DayPrice : string;
   gym3DayPrice : string;
   gym7DayPrice : string;
@@ -118,6 +120,8 @@ const partnerSlice = createSlice({
         partnerItem.gymTime=modifyItem.gymTime;
         partnerItem.gymService=modifyItem.gymService;
         partnerItem.gymPhoto=modifyItem.gymPhoto;
+        partnerItem.fileName = modifyItem.fileName;
+        partnerItem.fileType = modifyItem.fileType;
         partnerItem.gym1DayPrice=modifyItem.gym1DayPrice;
         partnerItem.gym3DayPrice=modifyItem.gym3DayPrice;
         partnerItem.gym7DayPrice=modifyItem.gym7DayPrice;

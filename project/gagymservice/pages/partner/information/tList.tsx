@@ -33,7 +33,7 @@ const tList=()=>{
         <table className="table mx-auto" >
           <thead>
             <tr>
-              <th scope="col">헬스장명</th>
+              <th scope="col">헬스장코드</th>
               <th scope="col">이름</th>
               <th scope="col">한줄소개</th>
             </tr>

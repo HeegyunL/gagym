@@ -1,25 +1,23 @@
-import Link from "next/link";
+
 import { useRouter } from "next/router";
 import React, { MutableRefObject, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, ModalBody, ModalFooter } from "reactstrap";
 import Layout from "../../../../components/layout";
-import partnerSaga from "../../../../middleware/modules/partner";
 import { AppDispatch, RootState } from "../../../../provider";
-import { PartnerItemResponse } from "../../../api/partner";
 import { requestModifyPartner } from "../../../../middleware/modules/partner";
-import { GetServerSideProps } from "next";
-import partner from "../../../../provider/modules/partner";
 import { requestModifyTrainer } from "../../../../middleware/modules/trainer";
+import { requestFetchTrainer } from "../../../../middleware/modules/trainer";
  
 const PartnerEdit = () => {
+  const [modalOpen, setModalOpen] = React.useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const id = router.query.id as string;
 
   const PartnerItem = useSelector((state:RootState)=>state.partner.data.find((item)=>item.id ===+id))
-  const TrainerItem = useSelector((state:RootState)=> state.trainer.data.filter((item)=>item.gymCode === +id))
-  
+  const TrainerItem = useSelector((state:RootState)=>state.trainer.data.filter((item)=>item.gymCode == PartnerItem?.id));
+  const Trainermodi = useSelector((state:RootState)=>state.trainer.data.find((item)=>item.gymCode === +id))
   const isModifyCompleted = useSelector((state:RootState)=> state.partner.isModifyCompleted);
 
     // 헬스장
@@ -67,7 +65,7 @@ const PartnerEdit = () => {
     }
 
 
-    const [modalOpen, setModalOpen] = React.useState(false);
+  
     // 강사
     const trainerNameRef=useRef() as MutableRefObject<HTMLInputElement>;
     const trainerIntroRef=useRef() as MutableRefObject<HTMLInputElement>;
@@ -85,30 +83,35 @@ const PartnerEdit = () => {
     const pilates10TimePriceRef=useRef() as MutableRefObject<HTMLInputElement>;
     const pilates30TimePriceRef=useRef() as MutableRefObject<HTMLInputElement>;
     
-    // const trainerSaveClick =()=>{
-    //   if(TrainerItem){
-    //     const item ={...TrainerItem};
-    //     item.trainerName = trainerNameRef.current?.value;
-    //     item.trainerIntro= trainerIntroRef.current?.value;
-    //     item.pt1TimePrice =pt1TimePriceRef.current?.value;
-    //     item.pt10TimePrice = pt10TimePriceRef.current?.value;
-    //     item.pt30TimePrice = pt30TimePriceRef.current?.value;
-    //     item.yoga1TimePrice=yoga1TimePriceRef.current?.value;
-    //     item.yoga10TimePrice=yoga10TimePriceRef.current?.value;
-    //     item.yoga30TimePrice=yoga30TimePriceRef.current?.value;
-    //     item.pilates1TimePrice=pilates1TimePriceRef.current?.value;
-    //     item.pilates10TimePrice=pilates10TimePriceRef.current?.value;
-    //     item.pilates30TimePrice=pilates30TimePriceRef.current?.value;
+    const trainerSaveClick =()=>{
+      if(Trainermodi){
+        const item ={...Trainermodi};
+        item.trainerName = trainerNameRef.current?.value;
+        item.trainerIntro= trainerIntroRef.current?.value;
+        item.pt1TimePrice =pt1TimePriceRef.current?.value;
+        item.pt10TimePrice = pt10TimePriceRef.current?.value;
+        item.pt30TimePrice = pt30TimePriceRef.current?.value;
+        item.yoga1TimePrice=yoga1TimePriceRef.current?.value;
+        item.yoga10TimePrice=yoga10TimePriceRef.current?.value;
+        item.yoga30TimePrice=yoga30TimePriceRef.current?.value;
+        item.pilates1TimePrice=pilates1TimePriceRef.current?.value;
+        item.pilates10TimePrice=pilates10TimePriceRef.current?.value;
+        item.pilates30TimePrice=pilates30TimePriceRef.current?.value;
         
-    //     dispatch(requestModifyTrainer(item));
-    //     router.push("/partner/information/list");
-    //   }
-    // }
+        dispatch(requestModifyTrainer(item));
+        router.push("/partner/information/list");
+  
+      }
+    }
+    const trainer = useSelector((state:RootState)=>state.trainer)
 
-    useEffect(()=>{
-      
-      isModifyCompleted &&router.push(`/partner/information/list/`);
-    },[isModifyCompleted,router,]);
+    useEffect(() => {
+        dispatch(
+          requestFetchTrainer()
+        );
+      isModifyCompleted&&router.push(`/partner/information/list`)
+    }, [dispatch, trainer.isFetched, isModifyCompleted,router]);
+  
 
     
   return(
@@ -299,13 +302,15 @@ const PartnerEdit = () => {
                     >
                       Close
                     </Button>
-                    <Button color="primary" type="button">
+                    <Button color="primary" type="button" 
+                    onClick={() => trainerSaveClick()}>
                       Save changes
                     </Button>
                   </ModalFooter>
                 </Modal>
               </div>
               ))}
+              
             </p>
             </div>
           {/* 가격 */}

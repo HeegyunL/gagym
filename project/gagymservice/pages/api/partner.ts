@@ -12,6 +12,8 @@ export interface PartnerItemResponse{
   gymTime : string;
   gymService :string;
   gymPhoto:string;
+  fileName:string;
+  fileType:string;
   gym1DayPrice : string;
   gym3DayPrice : string;
   gym7DayPrice : string;
@@ -33,6 +35,8 @@ export interface PartnerItemRequest{
   gymTime : string;
   gymService :string;
   gymPhoto:string;
+  fileName:string;
+  fileType:string;
   gym1DayPrice : string;
   gym3DayPrice : string;
   gym7DayPrice : string;
