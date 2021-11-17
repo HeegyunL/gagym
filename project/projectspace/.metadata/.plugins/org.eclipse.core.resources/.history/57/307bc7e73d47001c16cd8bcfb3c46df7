@@ -1,0 +1,33 @@
+package com.git.partnerMq.partner;
+
+import javax.persistence.Column;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class PartnerCreateRequest {
+	private long id;
+	  private String gymName;
+	  private String gymCoNum;
+	  private String gymLocateSi;
+	  private String gymLocateGunGu;
+	  private String gymAddress;
+	  private String gymPhoneNum;
+	  private String gymTime;
+	  private String gymService;
+	  @Column(columnDefinition = "TEXT")
+	  private String gymPhoto;
+	  private String fileName;
+	  private String fileType;
+	  private String gym1DayPrice;
+	  private String gym3DayPrice;
+	  private String gym7DayPrice;
+	  private String gymMonthPrice;
+	  private String gym3MonthPrice;
+	  private String gym6MonthPrice;
+	  private String gymYearPrice;
+}

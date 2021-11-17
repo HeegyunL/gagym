@@ -1,0 +1,70 @@
+package com.git.image;
+
+import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
+
+import java.io.IOException;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
+
+@RestController
+public class ImageController {
+private final String BUCKET_NAME = "gagymservice";
+private final String DISTRIBUTION_URL = "https://d2ddpqcbz93ech.cloudfront.net";
+private AmazonS3 client;
+
+@Autowired
+public ImageController(AmazonS3 client) {
+	this.client = client;
+}
+@PostMapping("/files")
+public String uploadFile(@RequestPart("file")MultipartFile file) throws IOException{
+	ObjectMetadata metadata = new ObjectMetadata();
+	metadata.setContentType(file.getContentType());
+	metadata.setContentLength(file.getSize());
+	
+	String objectKey = getObjectKey(file.getOriginalFilename());
+	
+	PutObjectRequest req = new PutObjectRequest(
+			BUCKET_NAME,
+			objectKey,
+			file.getInputStream(),
+			metadata
+			).withCannedAcl(CannedAccessControlList.PublicRead);
+	
+	PutObjectResult result = client.putObject(req);
+	System.out.println(result.getETag());
+	return DISTRIBUTION_URL + objectKey;
+	}
+@DeleteMapping("/files/{objectKey}")
+public void deleteFile(@PathVariable String objectKey,HttpServletResponse res) {
+	System.out.println(objectKey);
+	if(!client.doesObjectExist(BUCKET_NAME,objectKey)) {
+		res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		return;
+	}
+	client.deleteObject(BUCKET_NAME,objectKey);
+	System.out.println("---deleted--");
+	
+}
+private String getObjectKey(String filename) {
+	String secret = "git2021";
+	long timestamp = new Date().getTime();
+	return sha256Hex(secret + filename + timestamp);
+	}
+
+}

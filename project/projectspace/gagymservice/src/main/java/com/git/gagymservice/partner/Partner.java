@@ -1,5 +1,6 @@
 package com.git.gagymservice.partner;
 
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,6 +29,9 @@ public class Partner {
 	private String gymPhoneNum;
 	private String gymTime;
 	private String gymService;
+//	private String gymPhoto;
+//	private String fileType;
+//	private String fileName;
 	private String gym1DayPrice;
 	private String gym3DayPrice;
 	private String gym7DayPrice;
@@ -35,5 +39,6 @@ public class Partner {
 	private String gym3MonthPrice;
 	private String gym6MonthPrice;
 	private String gymYearPrice;
+//	private List gymTrainer;
 
 }

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-ssh -i "/Users/hee/Documents/keys/myworkspace.pem" ubuntu@ec2-13-125-231-210.ap-northeast-2.compute.amazonaws.com
+ssh -i "/Users/hee/Documents/keys/myworkspace.pem" ubuntu@ec2-54-180-151-228.ap-northeast-2.compute.amazonaws.com

@@ -1,0 +1,5 @@
+package com.git.image;
+
+public class ImageConfiguration {
+
+}

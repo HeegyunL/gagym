@@ -16,7 +16,6 @@ public class HelloProducerService {
 	}
 
 	public void sendMessage(byte[] message) {
-		rabbit.send("test.hello.1", new Message(message));
-		rabbit.send("test.hello.2", new Message(message));
+		rabbit.send("service.diary.create", new Message(message));
 	}
 }

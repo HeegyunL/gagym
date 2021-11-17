@@ -17,8 +17,8 @@ import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
 @RestController
 public class FileController {
-    private final String BUCKET_NAME = "git2021-bucket-pt3";
-    private final String DISTRIBUTION_URL = "https://d11jmdnfzjjkzd.cloudfront.net";
+    private final String BUCKET_NAME = "gagymservice";
+    private final String DISTRIBUTION_URL = "https://d2ddpqcbz93ech.cloudfront.net";
     private AmazonS3 client;
 
     @Autowired

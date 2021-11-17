@@ -80,11 +80,11 @@ const partnerSlice = createSlice({
     },
     //payload 없는 reducer
     //complted 관련된 속성을 삭제함 (undefined 상태)
-    initialCompleted : (state)=>{
+    initialCompleted: (state) => {
       delete state.isAddCompleted;
       delete state.isRemoveCompleted;
       delete state.isModifyCompleted;
-    }, 
+    },
     initialPartnerItem : (state, action: PayloadAction<PartnerItem>)=>{
       const partner = action.payload;
       state.data=[{ ...partner }];

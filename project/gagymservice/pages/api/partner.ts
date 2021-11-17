@@ -63,6 +63,11 @@ const partnerApi = {
     `http://localhost:8080/partner`,
     partnerItem
   ),
+  addMq:(partnerItem:PartnerItemRequest)=>
+  axios.post<PartnerItemResponse>(
+    `http://localhost:7070/partner`,
+    partnerItem
+  ),
   remove:(id:number) =>
   axios.delete<boolean>(`http://localhost:8080/partner/${id}`),
 

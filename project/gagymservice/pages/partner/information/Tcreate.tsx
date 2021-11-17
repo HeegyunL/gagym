@@ -9,7 +9,6 @@ import { requestFetchPartner } from "../../../middleware/modules/partner";
 
 import React from "react";
 import Layout from "../../../components/layout";
-import NavItem from "@restart/ui/esm/NavItem";
 const Tcreate = () => {
   const gymCodeRef = useRef() as MutableRefObject<HTMLDivElement>;
   const trainerNameRef = useRef() as MutableRefObject<HTMLInputElement>;
@@ -123,21 +122,6 @@ const Tcreate = () => {
             >
               {partnerData.data.map((item, index) => (
                 <div className="ms-2" key={`partner-item-${index}`}>
-                  {/* <input
-                    type="radio"
-                    className="btn-check ms-1"
-                    key={item.gymName}
-                    id={item.gymName}
-                    name={item.gymName}
-                    value={item.id}
-                    // autoComplete="off"
-                  />
-                  <label
-                    className="btn btn-outline-primary"
-                    htmlFor={item.gymName}
-                  >
-                    {item.gymName}
-                  </label> */}
                   <div className="form-check">
                     <input
                       className="form-check-input"

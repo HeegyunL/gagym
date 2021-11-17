@@ -1,0 +1,5 @@
+package com.git.gagymservice.configuration;
+
+public class RabbitConfiguration {
+
+}

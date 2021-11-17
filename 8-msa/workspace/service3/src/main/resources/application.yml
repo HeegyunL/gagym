@@ -23,6 +23,11 @@ management:
     web:
       exposure:
         include: "*"
+  rabbitmq:
+#   addresses: amqps://b-815d5d4a-a594-445f-8668-98c19d7dde86.mq.ap-northeast-2.amazonaws.com:5671
+    addresses: amqps://b-f96775a8-8bcb-4e8f-a88d-f5e27cb54f03.mq.ap-northeast-2.amazonaws.com:5671
+    username: rabbitmq
+    password: password123!
         
         
 ---
@@ -31,6 +36,6 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://ec2-52-79-57-244.ap-northeast-2.compute.amazonaws.com:8761/eureka/
+      defaultZone: http://ec2-3-38-153-49.ap-northeast-2.compute.amazonaws.com:8761/eureka/
   instance:
     hostname: ec2-13-125-231-210.ap-northeast-2.compute.amazonaws.com
