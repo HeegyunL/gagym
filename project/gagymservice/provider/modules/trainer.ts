@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface TrainerItem {
 
   id: number;
-  gymCode:number;
+  gymCode:string;
   trainerName:string;
   trainerIntro:string;
   trainerPhotoUrl:string;

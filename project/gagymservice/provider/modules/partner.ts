@@ -24,25 +24,6 @@ export interface PartnerItem {
   gymYearPrice : string;
   // gymTrainer : TrainerItem[];
 }
-
-
-
-// export interface TrainerItem {
-//   id: number;
-//   trainerName:string;
-//   trainerIntro:string;
-//   trainerPhotoUrl:string;
-//   pt1TimePrice:string;
-//   pt10TimePrice:string;
-//   pt30TimePrice:string;
-//   yoga1TimePrice:string;
-//   yoga10TimePrice:string;
-//   yoga30TimePrice:string;
-//   pilates1TimePrice:string;
-//   pilates10TimePrice:string;
-//   pilates30TimePrice:string;
-
-// }
 interface PartnerState {
   data : PartnerItem[];
   isFetched : boolean;
@@ -51,14 +32,6 @@ interface PartnerState {
   isModifyCompleted?: boolean;
 
 }
-
-
-
-
-
-
-
-
 
 const initialState : PartnerState ={
   data : [],

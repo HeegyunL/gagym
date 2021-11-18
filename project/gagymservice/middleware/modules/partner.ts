@@ -53,11 +53,11 @@ function* addData(action : PayloadAction<PartnerItem>){
   //   partnerItemPayload.fileType
   // );
   //   //form data객체 생성
-  //   const formFile = new FormData();
-  //   formFile.set("file",file);
+    // const formFile = new FormData();
+    // formFile.set("file",file);
 
   //   //multipart/ form-data로 업로드
-  //   const fileUrl:AxiosResponse<string> = yield call(fileApi.upload, formFile);
+    // const fileUrl:AxiosResponse<string> = yield call(fileApi.upload, formFile);
 
 
   // rest api로 보낼 요청객체
@@ -72,9 +72,9 @@ function* addData(action : PayloadAction<PartnerItem>){
     gymTime : partnerItemPayload.gymTime,
     gymService :partnerItemPayload.gymService,
     // gymPhoto: fileUrl.data,
-    // gymPhoto: partnerItemPayload.gymPhoto,
-    // fileType : partnerItemPayload.fileType,
-    // fileName : partnerItemPayload.fileName,
+    gymPhoto: partnerItemPayload.gymPhoto,
+    fileType : partnerItemPayload.fileType,
+    fileName : partnerItemPayload.fileName,
     gym1DayPrice : partnerItemPayload.gym1DayPrice,
     gym3DayPrice : partnerItemPayload.gym3DayPrice,
     gym7DayPrice : partnerItemPayload.gym7DayPrice,
@@ -105,93 +105,9 @@ function* addData(action : PayloadAction<PartnerItem>){
   gymPhoneNum : result.data.gymPhoneNum,
   gymTime : result.data.gymTime,
   gymService :result.data.gymService,
-  // gymPhoto:result.data.gymPhoto,
-  // fileType:result.data.fileType,
-  // fileName:result.data.fileName,
-  gym1DayPrice : result.data.gym1DayPrice,
-  gym3DayPrice : result.data.gym3DayPrice,
-  gym7DayPrice : result.data.gym7DayPrice,
-  gymMonthPrice : result.data.gymMonthPrice,
-  gym3MonthPrice : result.data.gym3MonthPrice,
-  gym6MonthPrice : result.data.gym6MonthPrice,
-  gymYearPrice : result.data.gymYearPrice,
-  // gymTrainer : result.data.gymTrainer
-
- }
-
- yield put(addPartner(partnerItem));
- yield put(initialCompleted());
-
-}
-function* addMqData(action : PayloadAction<PartnerItem>){
-  // action의 payload로 넘어온 객체
-  const partnerItemPayload = action.payload;
-
-
-  // s3업로드
-  // URL -> file변환
-  // const file : File = yield call(
-  //   dataUrlToFile,
-  //   partnerItemPayload.gymPhoto,
-  //   partnerItemPayload.fileName,
-  //   partnerItemPayload.fileType
-  // );
-  //   //form data객체 생성
-  //   const formFile = new FormData();
-  //   formFile.set("file",file);
-
-  //   //multipart/ form-data로 업로드
-  //   const fileUrl:AxiosResponse<string> = yield call(fileApi.upload, formFile);
-
-
-  // rest api로 보낼 요청객체
-  const partnerItemRequest : PartnerItemRequest ={
-    id:partnerItemPayload.id,
-    gymName:partnerItemPayload.gymName,
-    gymCoNum : partnerItemPayload.gymCoNum,
-    gymLocateSi : partnerItemPayload.gymLocateSi,
-    gymLocateGunGu : partnerItemPayload.gymLocateGunGu,
-    gymAddress : partnerItemPayload.gymAddress,
-    gymPhoneNum : partnerItemPayload.gymPhoneNum,
-    gymTime : partnerItemPayload.gymTime,
-    gymService :partnerItemPayload.gymService,
-    // gymPhoto: fileUrl.data,
-    // gymPhoto: partnerItemPayload.gymPhoto,
-    // fileType : partnerItemPayload.fileType,
-    // fileName : partnerItemPayload.fileName,
-    gym1DayPrice : partnerItemPayload.gym1DayPrice,
-    gym3DayPrice : partnerItemPayload.gym3DayPrice,
-    gym7DayPrice : partnerItemPayload.gym7DayPrice,
-    gymMonthPrice : partnerItemPayload.gymMonthPrice,
-    gym3MonthPrice : partnerItemPayload.gym3MonthPrice,
-    gym6MonthPrice : partnerItemPayload.gym6MonthPrice,
-    gymYearPrice : partnerItemPayload.gymYearPrice,
-    // gymTrainer :partnerItemPayload.gymTrainer,
-  }
-  const result : AxiosResponse<PartnerItemResponse> = yield call(
-    api.addMq,
-    partnerItemRequest
-  )
-
-  //redux state 변경
-  //redux state 조회하기
-  const partnerData : PartnerItem[]= yield select(
-    (state:RootState)=> state.partner.data
-  );
-
- const partnerItem : PartnerItem={
-  id:result.data.id,
-  gymName:result.data.gymName,
-  gymCoNum : result.data.gymCoNum,
-  gymLocateSi : result.data.gymLocateSi,
-  gymLocateGunGu : result.data.gymLocateGunGu,
-  gymAddress : result.data.gymAddress,
-  gymPhoneNum : result.data.gymPhoneNum,
-  gymTime : result.data.gymTime,
-  gymService :result.data.gymService,
-  // gymPhoto:result.data.gymPhoto,
-  // fileType:result.data.fileType,
-  // fileName:result.data.fileName,
+  gymPhoto:result.data.gymPhoto,
+  fileType:result.data.fileType,
+  fileName:result.data.fileName,
   gym1DayPrice : result.data.gym1DayPrice,
   gym3DayPrice : result.data.gym3DayPrice,
   gym7DayPrice : result.data.gym7DayPrice,
@@ -331,9 +247,9 @@ const partners = result.data.map(
       gymPhoneNum : partnerItemPayload.gymPhoneNum,
       gymTime : partnerItemPayload.gymTime,
       gymService :partnerItemPayload.gymService,
-      // gymPhoto:partnerItemPayload.gymPhoto,
-      // fileName:partnerItemPayload.fileName,
-      // fileType:partnerItemPayload.fileType,
+      gymPhoto:partnerItemPayload.gymPhoto,
+      fileName:partnerItemPayload.fileName,
+      fileType:partnerItemPayload.fileType,
       gym1DayPrice : partnerItemPayload.gym1DayPrice,
       gym3DayPrice : partnerItemPayload.gym3DayPrice,
       gym7DayPrice : partnerItemPayload.gym7DayPrice,
@@ -361,9 +277,9 @@ const partners = result.data.map(
       gymPhoneNum : result.data.gymPhoneNum,
       gymTime : result.data.gymTime,
       gymService :result.data.gymService,
-      // gymPhoto:result.data.gymPhoto,
-      // fileName: result.data.fileName,
-      // fileType: result.data.fileType,
+      gymPhoto:result.data.gymPhoto,
+      fileName: result.data.fileName,
+      fileType: result.data.fileType,
       gym1DayPrice : result.data.gym1DayPrice,
       gym3DayPrice : result.data.gym3DayPrice,
       gym7DayPrice : result.data.gym7DayPrice,
@@ -383,7 +299,6 @@ const partners = result.data.map(
 export default function* partnerSaga(){
   //동일한 타입의 액션은 모두 처리함
   yield takeEvery(requestAddPartner, addData);
-  yield takeEvery(requestAddPartner, addMqData);
 
   yield takeLatest(requestFetchPartner, fetchData);
   yield takeEvery(requestFetchPartnerItem, fetchData);

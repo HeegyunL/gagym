@@ -78,7 +78,7 @@ const Tcreate = () => {
         console.log(radio.value);
         const item: TrainerItem = {
           id: trainerData.length ? trainerData[0].id + 1 : 1,
-          gymCode: Number(radio.value),
+          gymCode: radio.value,
           trainerName: trainerNameRef.current?.value,
           trainerIntro: trainerIntroRef.current?.value,
           // trainerPhotoUrl:reader.result ? reader.result.toString() : "",
@@ -128,7 +128,7 @@ const Tcreate = () => {
                       type="radio"
                       name="gymName"
                       id={item.gymName}
-                      value={item.id}
+                      value={item.gymCoNum}
                     />
                     <label className="form-check-label" htmlFor={item.gymName}>
                       {item.gymName}

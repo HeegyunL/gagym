@@ -10,7 +10,6 @@ import {
 } from "../../../../middleware/modules/partner";
 import { requestFetchTrainer } from "../../../../middleware/modules/trainer";
 import { AppDispatch, RootState, store } from "../../../../provider";
-import { removePartner } from "../../../../provider/modules/partner";
 
 const PartnerDetail = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -47,7 +46,9 @@ const PartnerDetail = () => {
     router.push(`/partner/information/list`);
   };
 
-  const trainers = trainer.data.filter((item) => item.gymCode == partners?.id);
+  const trainers = trainer.data.filter(
+    (item) => item.gymCode == partners?.gymCoNum
+  );
   console.log(trainers);
 
   return (

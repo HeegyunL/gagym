@@ -55,18 +55,18 @@ public class FileController {
         return DISTRIBUTION_URL + objectKey;
     }
 
-    @DeleteMapping("/files/{objectKey}")
-    public void deleteFile(@PathVariable String objectKey, HttpServletResponse res) {
-        if (!client.doesObjectExist(BUCKET_NAME, objectKey)) {
-            res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-        client.deleteObject(BUCKET_NAME, objectKey);
-        System.out.println("--deleted--");
-    }
-
-    //OTP(One Time Password) : secret + unique + time
-    //object key 해시 생성
+//    @DeleteMapping("/files/{objectKey}")
+//    public void deleteFile(@PathVariable String objectKey, HttpServletResponse res) {
+//        if (!client.doesObjectExist(BUCKET_NAME, objectKey)) {
+//            res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//            return;
+//        }
+//        client.deleteObject(BUCKET_NAME, objectKey);
+//        System.out.println("--deleted--");
+//    }
+//
+//    //OTP(One Time Password) : secret + unique + time
+//    //object key 해시 생성
     private String getObjectKey(String filename) {
         String secret = "git2021";
         long timestamp = new Date().getTime();

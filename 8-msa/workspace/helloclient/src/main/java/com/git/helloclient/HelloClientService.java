@@ -28,10 +28,10 @@ public class HelloClientService {
 	}
 
 	// 1번 -- 수신쪽은 본인 번호
-	@RabbitListener(queues = "service.gym.create")
+	@RabbitListener(queues = "service.reservation.create")
 	public void receiveMessage(String message) throws UnsupportedEncodingException {
 
-		System.out.println("-- service.gym.create --");
+		System.out.println("-- service.reservation.create --");
 		System.out.println(message);
 
 		emitters.values().parallelStream().forEach(emitter -> {

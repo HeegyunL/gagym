@@ -70,11 +70,12 @@ const Create = () => {
         //Saga action
         dispatch(requestAddPartner(item));
         // router.push(`/partner/information/list`);
+        // };
+        reader.readAsDataURL(imageFile);
+        // }
       };
-      reader.readAsDataURL(imageFile);
     }
   };
-
   return (
     <Layout>
       <body>

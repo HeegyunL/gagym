@@ -3,54 +3,44 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
 export interface ReservationItem {
-  id: number;
-  memberName: string;
-  gymName:string;
-  memberPhoneNum:string;
-  reservationService:string;
-  reservationTeacher:string;
-  request:string;
+  id : number;
+  memberName:string;
+  memberPhone:string;
+	memberRequest:string;
+	gymName:string;
+	trainerName:string;
+	boughtService:string;
 }
 
 
 
-export interface ReservationPage {
-  data: ReservationItem[];
-  totalElements: number;
-  totalPages: number;
-  page: number;
-  pageSize: number;
-  isLast: boolean;
-}
+// export interface ReservationPage {
+//   data: ReservationItem[];
+//   totalElements: number;
+//   totalPages: number;
+//   page: number;
+//   pageSize: number;
+//   isLast: boolean;
+// }
 interface ReservationState {
   data : ReservationItem[];
   isFetched : boolean;
   isAddCompleted? : boolean;
   isRemoveCompleted?: boolean; 
   isModifyCompleted?: boolean;
-  totalElements?: number;
-  totalPages: number;
-  page: number;
-  pageSize: number;
-  isLast?: boolean;
+  // totalElements?: number;
+  // totalPages: number;
+  // page: number;
+  // pageSize: number;
+  // isLast?: boolean;
 }
 
 const initialState : ReservationState ={
-  data: [
-    {
-      id:1,
-      memberName:"나멸치",
-      gymName: " 이희균",
-      memberPhoneNum:"010-1203-1231",
-      reservationService:"pt1회 이용권, 헬스장 3일권",
-      reservationTeacher:"한동기",
-      request:"하체 중심ㄱㄴ?",
-    }
-  ],
+  data: [],
   isFetched: false,
-  page: 0,
-  pageSize: 5,
-  totalPages: 0,
+  // page: 0,
+  // pageSize: 5,
+  // totalPages: 0,
 }
 
 
@@ -86,9 +76,10 @@ const reservationSlice = createSlice({
       if (reservationItem) {
         reservationItem.memberName = modifyItem.memberName;
         reservationItem.gymName = modifyItem.gymName;
-        reservationItem.memberPhoneNum = modifyItem.memberPhoneNum;
-        reservationItem.reservationService = modifyItem.reservationService;
-        reservationItem.reservationTeacher = modifyItem.reservationTeacher;
+        reservationItem.trainerName=modifyItem.trainerName;
+        reservationItem.memberPhone=modifyItem.memberPhone;
+        reservationItem.memberRequest=modifyItem.memberRequest;
+        reservationItem.boughtService=modifyItem.boughtService;
 
       }
            state.isModifyCompleted = true;
@@ -99,16 +90,16 @@ const reservationSlice = createSlice({
       state.data = reservations;
       state.isFetched = true;
     },
-    initialPagedReservation: (state, action: PayloadAction<ReservationPage>) => {
+    // initialPagedReservation: (state, action: PayloadAction<ReservationPage>) => {
 
-      state.data = action.payload.data;
-      state.totalElements = action.payload.totalElements;
-      state.totalPages = action.payload.totalPages;
-      state.page = action.payload.page;
-      state.pageSize = action.payload.pageSize;
-      state.isLast = action.payload.isLast;
-      state.isFetched = true;
-    },
+    //   state.data = action.payload.data;
+    //   state.totalElements = action.payload.totalElements;
+    //   state.totalPages = action.payload.totalPages;
+    //   state.page = action.payload.page;
+    //   state.pageSize = action.payload.pageSize;
+    //   state.isLast = action.payload.isLast;
+    //   state.isFetched = true;
+    // },
   },
 });
 
@@ -118,7 +109,7 @@ export const {
   modifyReservation,  
   initialReservation,
   initialCompleted,
-  initialPagedReservation,
+  // initialPagedReservation,
 } = reservationSlice.actions;
 
 

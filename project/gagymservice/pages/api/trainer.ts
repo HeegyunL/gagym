@@ -2,7 +2,7 @@ import axios from "axios";
 
 export interface TrainerItemResponse{
   id: number;
-  gymCode:number;
+  gymCode:string;
   trainerName:string;
   trainerIntro:string;
   trainerPhotoUrl:string;
@@ -19,7 +19,7 @@ export interface TrainerItemResponse{
 
 export interface TrainerItemRequest{
   id: number;
-  gymCode:number;
+  gymCode:string;
   trainerName:string;
   trainerIntro:string;
   trainerPhotoUrl:string;
