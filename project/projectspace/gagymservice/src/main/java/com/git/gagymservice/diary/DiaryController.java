@@ -21,12 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class DiaryController {
+	private DiaryService service;
 	private DiaryRepository repo;
 	
 	@Autowired
-	public DiaryController(DiaryRepository repo)
+	public DiaryController(DiaryRepository repo, DiaryService service)
 	{
 		this.repo =repo;
+		this.service =service;
 	}
 	@GetMapping(value="diary")
 	public List<Diary> getDiary() throws InterruptedException{
@@ -48,7 +50,7 @@ public class DiaryController {
 		res.setStatus(HttpServletResponse.SC_CREATED);
 		return diarySaved;
 	}
-	@DeleteMapping(value ="/diary")
+	@DeleteMapping(value ="/diary/{id}")
 	public boolean removeDiary(@PathVariable long id, HttpServletResponse res)throws InterruptedException{
 		Optional<Diary>diary = repo.findById(id);
 		if(diary.isEmpty()) {
@@ -58,7 +60,7 @@ public class DiaryController {
 		repo.deleteById(id);
 		return true;
 	}
-	@PutMapping(value="/diary/")
+	@PutMapping(value="/diary/{id}")
 	public Diary modifyDiary(@PathVariable long id, @RequestBody Diary diary, HttpServletResponse res)
 	throws InterruptedException{
 		Optional<Diary> diaryItem = repo.findById(id);
@@ -77,6 +79,7 @@ public class DiaryController {
 		diaryToSave.setTrainerFeedback(diary.getTrainerFeedback());
 	
 		Diary diarySaved = repo.save(diaryToSave);
+		service.sendDiary(diary);
 		return diarySaved;
 	}
 

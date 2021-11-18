@@ -17,12 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TrainerController {
+	private TrainerService	service;
 	private TrainerRepository repo;
 	
 	@Autowired
-	public TrainerController(TrainerRepository repo)
+	public TrainerController(TrainerRepository repo, TrainerService service)
 	{
 		this.repo =repo;
+		this.service = service;
+		
 	}
 	@GetMapping(value="/trainer")
 	public List<Trainer>getTrainer() throws InterruptedException{
@@ -41,6 +44,7 @@ public class TrainerController {
 		
 		Trainer trainerSaved = repo.save(trainerItem);
 		res.setStatus(HttpServletResponse.SC_CREATED);
+		service.sendTrainer(trainer);
 		return trainerSaved;
 	}
 	
@@ -79,6 +83,7 @@ public class TrainerController {
 		trainerToSave.setPilates30TimePrice(trainer.getPilates30TimePrice());
 		
 		Trainer trainerSaved = repo.save( trainerToSave);
+		service.sendTrainer(trainer);
 		return trainerSaved;
 		
 	}

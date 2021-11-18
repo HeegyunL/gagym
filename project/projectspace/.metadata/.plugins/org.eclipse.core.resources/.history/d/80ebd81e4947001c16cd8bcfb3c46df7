@@ -1,0 +1,22 @@
+package com.git.receive.reservation;
+
+import javax.persistence.Entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
+public class Reservation {
+	private String memberName;
+	private String memberPhone;
+	private String memberRequest;
+	private String gymName;
+	private String trainerName;
+	private String boughtService;
+}

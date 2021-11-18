@@ -6,9 +6,11 @@
 		<item key="DIALOG_WIDTH" value="305"/>
 		<item key="DIALOG_HEIGHT" value="420"/>
 		<item key="DIALOG_FONT_NAME" value="1|.AppleSystemUIFont|11.0|0|COCOA|1|.AppleSystemUIFont"/>
-		<item key="ShowViewDialog.STORE_SELECTED_VIEW_ID" value="org.eclipse.buildship.ui.views.taskview"/>
+		<item key="ShowViewDialog.STORE_SELECTED_VIEW_ID" value="org.eclipse.debug.ui.VariableView"/>
 		<list key="ShowViewDialog.STORE_EXPANDED_CATEGORIES_ID">
+			<item value="Debug"/>
 			<item value="Gradle"/>
+			<item value="Other"/>
 		</list>
 	</section>
 </section>

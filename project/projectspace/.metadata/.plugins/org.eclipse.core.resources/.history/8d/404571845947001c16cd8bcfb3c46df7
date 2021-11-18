@@ -1,0 +1,5 @@
+package com.git.receive.reservation;
+
+public class ReservationController {
+
+}

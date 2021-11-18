@@ -15,13 +15,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
+
 @RestController
 public class PartnerController {
+	private PartnerService service;
 	private PartnerRepository repo;
 	
 	@Autowired
-	public PartnerController(PartnerRepository repo)
+	public PartnerController(PartnerRepository repo , PartnerService service)
 	{
+		this.service = service;
 		this.repo=repo;
 	}
 	
@@ -39,9 +42,9 @@ public class PartnerController {
 				.gymName(partner.getGymName()).gymCoNum(partner.getGymCoNum()).gymLocateSi(partner.getGymLocateSi())
 				.gymLocateGunGu(partner.getGymLocateGunGu()).gymAddress(partner.getGymAddress()).gymPhoneNum(partner.getGymPhoneNum())
 				.gymTime(partner.getGymTime()).gymService(partner.getGymService())
-//				.gymPhoto(partner.getGymPhoto())
-//				.fileType(partner.getFileType())
-//				.fileName(partner.getFileName())
+				.gymPhoto(partner.getGymPhoto())
+				.fileType(partner.getFileType())
+				.fileName(partner.getFileName())
 				.gym1DayPrice(partner.getGym1DayPrice())
 				.gym3DayPrice(partner.getGym3DayPrice()).gym7DayPrice(partner.getGym7DayPrice())
 				.gym3MonthPrice(partner.getGymMonthPrice()).gym3MonthPrice(partner.getGym3MonthPrice()).gym6MonthPrice(partner.getGym6MonthPrice())
@@ -50,6 +53,7 @@ public class PartnerController {
 		
 		Partner partnerSaved = repo.save(partnerItem);
 		res.setStatus(HttpServletResponse.SC_CREATED);
+		service.sendPartner(partner);
 		return partnerSaved;
 				
 	}
@@ -108,9 +112,9 @@ public class PartnerController {
 		partnerToSave.setGymPhoneNum(partner.getGymPhoneNum());
 		partnerToSave.setGymTime(partner.getGymTime());
 		partnerToSave.setGymService(partner.getGymService());
-//		partnerToSave.setGymPhoto(partner.getGymPhoto());
-//		partnerToSave.setFileName(partner.getFileName());
-//		partnerToSave.setFileType(partner.getFileType());
+		partnerToSave.setGymPhoto(partner.getGymPhoto());
+		partnerToSave.setFileName(partner.getFileName());
+		partnerToSave.setFileType(partner.getFileType());
 		partnerToSave.setGym1DayPrice(partner.getGym1DayPrice());
 		partnerToSave.setGym3DayPrice(partner.getGym3DayPrice());
 		partnerToSave.setGym7DayPrice(partner.getGym7DayPrice());
@@ -120,6 +124,7 @@ public class PartnerController {
 		partnerToSave.setGymYearPrice(partner.getGymYearPrice());
 		
 		Partner partnerSaved = repo.save(partnerToSave);
+		service.sendPartner(partner);
 		return partnerSaved;
 		
 		}

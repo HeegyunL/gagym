@@ -1,13 +1,18 @@
-server:
-  port: 7070
 spring:
   rabbitmq:
-    # rabbitmq 서버주소
+    listener:
+      simple:
+        retry:
+          enabled: true
+          initial-interval: 3s
+          max-interval: 10s
+          max-attempts: 5
+          multiplier: 2
     addresses: amqps://b-f96775a8-8bcb-4e8f-a88d-f5e27cb54f03.mq.ap-northeast-2.amazonaws.com:5671
     username: rabbitmq
     password: password123!
   datasource:
-    driver-class-name: org.postgresql.Driver  #postgresql
+    driver-class-name: org.postgresql.Driver
     # jdbc - java databse connector
     # :postresql - 데이터베이스 엔진
     # //url - 데이터베이스 주소
@@ -18,4 +23,9 @@ spring:
     password: password123!
   jpa:
     show-sql: true
-    generate-ddl: true  # create SQL 명령어를 자동으로 수행함, auto-migration   
+    generate-ddl: true  # create SQL 명령어를 자동으로 수행함, auto-migration
+  cache:
+    type: redis
+  redis:
+    host: 127.0.0.1
+    port: 6379

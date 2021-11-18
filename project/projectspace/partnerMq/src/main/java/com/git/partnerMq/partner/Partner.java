@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Partner {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String gymName;
 	private String gymCoNum;

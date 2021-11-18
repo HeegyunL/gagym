@@ -1,0 +1,99 @@
+package com.git.receive.reservation;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import com.git.receive.reservation.event.RequestReservation;
+
+@Service
+public class ReservationService {
+	ReservationRepository repo;
+	
+	private Map<String, SseEmitter> emitters = new ConcurrentHashMap<String, SseEmitter>();
+	
+	public void putEmitter(String clientId, SseEmitter emitter) {
+		this.emitters.put(clientId, emitter);
+		System.out.println(emitters.size());
+	}
+
+	public SseEmitter getEmitter(String clientId) {
+		return this.emitters.get(clientId);
+	}
+	public void removeEmitter(String clientId) {
+		this.emitters.remove(clientId);
+	}
+	public ReservationService(ReservationRepository repo) {
+		this.repo = repo;
+	}
+	// 데이터가 갱신되는 시점에 캐시 삭제
+		// ex) 타 시스템에서 데이터를 받아와서 저장함
+		@CacheEvict(value="reservation", allEntries = true)
+	@RabbitListener(queues="service.reservation.create")
+	public void receiveReservation(RequestReservation receiveReservation)throws UnsupportedEncodingException {
+		saveReservation(receiveReservation);
+		System.out.println("-- service.reservation.create --");
+		System.out.println(receiveReservation);
+		
+		emitters.values().parallelStream().forEach(emitter -> {
+			try {
+				emitter.send(receiveReservation);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+	}
+	
+	public Reservation saveReservation(RequestReservation receiveReservation) {
+		Reservation reservation = Reservation.builder()
+				.memberName(receiveReservation.getMemberName())
+				.memberPhone(receiveReservation.getMemberPhone())
+				.memberRequest(receiveReservation.getMemberRequest())
+				.gymName(receiveReservation.getGymName())
+				.trainerName(receiveReservation.getTrainerName())
+				.boughtService(receiveReservation.getBoughtService())
+				.build();
+		repo.save(reservation);
+		return reservation;
+	}
+//	private Map<String, SseEmitter> emitters = new ConcurrentHashMap<String, SseEmitter>();
+//
+//	public void putEmitter(String clientId, SseEmitter emitter) {
+//		this.emitters.put(clientId, emitter);
+//		System.out.println(emitters.size());
+//	}
+//
+//	public SseEmitter getEmitter(String clientId) {
+//		return this.emitters.get(clientId);
+//	}
+//
+//	public void removeEmitter(String clientId) {
+//		this.emitters.remove(clientId);
+//	}
+//
+//	// 1번 -- 수신쪽은 본인 번호
+//	@RabbitListener(queues = "service.reservation.create")
+//	public void receiveMessage(String message) throws UnsupportedEncodingException {
+//
+//		System.out.println("-- service.reservation.create --");
+//		System.out.println(message);
+//
+//		emitters.values().parallelStream().forEach(emitter -> {
+//			try {
+//				emitter.send(message);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		});
+//
+//	}
+	
+}

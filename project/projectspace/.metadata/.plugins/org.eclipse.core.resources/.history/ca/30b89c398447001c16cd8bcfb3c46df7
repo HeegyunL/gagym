@@ -1,0 +1,66 @@
+#server:
+#  port: 7071
+#spring:
+#  rabbitmq:
+#    # listener 재시도 횟수 설정
+#    # https://minholee93.tistory.com/entry/RabbitMQ-Retry-Mechanism-with-Spring-Boot
+#    listener:
+#      simple:
+#        retry:
+#          enabled: true
+#          initial-interval: 3s
+#          max-interval: 10s
+#          max-attempts: 5
+#          multiplier: 2
+##    host: ec2-3-35-229-119.ap-northeast-2.compute.amazonaws.com
+##   addresses: amqps://b-76783b42-45e7-4b95-b86c-a27a43b9787a.mq.ap-northeast-2.amazonaws.com:5671
+#    addresses: amqps://b-f96775a8-8bcb-4e8f-a88d-f5e27cb54f03.mq.ap-northeast-2.amazonaws.com:5671
+#    username: rabbitmq
+#    password: password123!
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    # jdbc - java databse connector
+#    # :postresql - 데이터베이스 엔진
+#    # //url - 데이터베이스 주소
+#    # :5432 - 데이터베이스 접속 포트
+#    # /postgres - 접속할 데이터베이스
+#    url: jdbc:postgresql://database-1.c7n5xpifh5uf.ap-northeast-2.rds.amazonaws.com:5432/postgres?currentSchema=projectspace
+#    username: postgres
+#    password: password123!
+#  jpa:
+#    show-sql: true
+#    generate-ddl: true  # create SQL 명령어를 자동으로 수행함, auto-migration
+#  cache:
+#    type: redis
+#  redis:
+#    host: 127.0.0.1
+#    port: 6379
+#    server:
+#  port: 5051
+spring:
+  rabbitmq:
+    listener:
+      simple:
+        retry:
+          enabled: true
+          initial-interval: 3s
+          max-interval: 10s
+          max-attempts: 5
+          multiplier: 2
+    addresses: amqps://b-f96775a8-8bcb-4e8f-a88d-f5e27cb54f03.mq.ap-northeast-2.amazonaws.com:5671
+    username: rabbitmq
+    password: password123!
+  datasource:
+    driver-class-name: org.postgresql.Driver   #postgresql
+#    driver-class-name: com.mysql.cj.jdbc.Driver #mysql
+    url: jdbc:postgresql://database-1.c7n5xpifh5uf.ap-northeast-2.rds.amazonaws.com:5432/postgres?currentSchema=projectspace
+    username: postgres
+    password: password123!
+  jpa:
+    show-sql: true
+    generate-ddl: true
+  cache:
+    type: redis
+  redis:
+    host: 127.0.0.1
+    port: 6379

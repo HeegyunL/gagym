@@ -1,0 +1,6 @@
+package com.git.receive.reservation;
+
+@Repository
+public class ReservationRepository extends JpaRepository<Reservation, Long>{
+	
+}

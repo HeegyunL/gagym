@@ -1,0 +1,23 @@
+package com.git.receive.reservation;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class ReservationController {
+	private ReservationService service;
+	private ReservationRepository repo;
+	
+	@Autowired
+	public ReservationController(ReservationService service, ReservationRepository repo) {
+		this.service = service;
+		this.repo = repo;
+	}
+	
+	@GetMapping("reservation/{id}")
+	public Reservation getReservation(@PathVariable long id) {
+		return repo.findById(id).orElse(null);
+	}
+
+}

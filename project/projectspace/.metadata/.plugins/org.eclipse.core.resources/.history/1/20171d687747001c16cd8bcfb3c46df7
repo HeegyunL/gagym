@@ -1,0 +1,44 @@
+package com.git.receive.reservation;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import com.git.receive.reservation.event.RequestReservation;
+
+@Service
+public class ReservationService {
+	ReservationRepository repo;
+	
+	
+	public ReservationService(ReservationRepository repo) {
+		this.repo = repo;
+	}
+	@RabbitListener(queues="service.reservation.create")
+	public void receiveReservation(Reservation reservation){
+		saveReservation(reservation);
+		System.out.println("-- service.reservation.create --");
+		System.out.println(reservation);
+		
+	}
+	
+	public Reservation saveReservation(Reservation reservation) {
+		Reservation saveReservation = Reservation.builder()
+				.memberName(reservation.getMemberName())
+				.memberPhone(reservation.getMemberPhone())
+				.memberRequest(reservation.getMemberRequest())
+				.gymName(reservation.getGymName())
+				.trainerName(reservation.getTrainerName())
+				.boughtService(reservation.getBoughtService())
+				.build();
+		repo.save(saveReservation);
+		return saveReservation;
+	}
+	
+}

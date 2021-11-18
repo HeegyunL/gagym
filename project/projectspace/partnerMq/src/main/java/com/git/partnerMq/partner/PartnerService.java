@@ -14,6 +14,6 @@ public class PartnerService {
 
 	public void sendPartner(Partner partner) {
 		System.out.println(partner);
-		rabbit.convertAndSend("service.gym.create", partner);
+		rabbit.convertAndSend("service.gym.create1", partner);
 	}
 }
